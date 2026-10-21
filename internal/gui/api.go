@@ -504,20 +504,30 @@ func routes(mux *http.ServeMux, version string) {
 		reply(w, eng.Limits())
 	})
 
-	// 界面偏好：字体大小（px），13 到 16，默认 14。
+	// 界面偏好：字体大小（px），13 到 16，默认 14；语言，zh 或 en，默认 zh。
 	mux.HandleFunc("GET /api/ui", func(w http.ResponseWriter, r *http.Request) {
-		reply(w, map[string]any{"font": uiFont()})
+		reply(w, map[string]any{"font": uiFont(), "lang": db.Setting("ui.lang", "zh")})
 	})
 	mux.HandleFunc("POST /api/ui", func(w http.ResponseWriter, r *http.Request) {
 		var req struct {
-			Font int `json:"font"`
+			Font *int   `json:"font"`
+			Lang string `json:"lang"`
 		}
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.Font < 13 || req.Font > 16 {
-			fail(w, http.StatusBadRequest, "字体大小要在 13 到 16 之间")
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			fail(w, http.StatusBadRequest, "请求格式不对")
 			return
 		}
-		db.SetSetting("ui.font", strconv.Itoa(req.Font))
-		reply(w, map[string]any{"font": uiFont()})
+		if req.Font != nil {
+			if *req.Font < 13 || *req.Font > 16 {
+				fail(w, http.StatusBadRequest, "字体大小要在 13 到 16 之间")
+				return
+			}
+			db.SetSetting("ui.font", strconv.Itoa(*req.Font))
+		}
+		if req.Lang != "" && (req.Lang == "zh" || req.Lang == "en") {
+			db.SetSetting("ui.lang", req.Lang)
+		}
+		reply(w, map[string]any{"font": uiFont(), "lang": db.Setting("ui.lang", "zh")})
 	})
 
 	// 审批与通知：危险操作清单（数据目录里的 approval-rules.txt）和两类系统通知的开关。

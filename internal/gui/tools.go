@@ -19,7 +19,7 @@ import (
 	"morula/internal/subs"
 )
 
-// 启动流程的第一、二步：选 AI 工具（没装的在这里装），每个工具配订阅、勾模型。
+// 启动流程的第一、二步：选 harness（没装的在这里装），每个工具配订阅、勾模型。
 // 没勾的工具和模型在 morula 里不出现（chosen）。hermes 没有订阅，第二步不列它。
 
 // toolLabels 是界面上的名字；不在表里的用 harness 名。

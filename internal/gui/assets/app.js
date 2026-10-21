@@ -1586,7 +1586,7 @@ function renderAgents(list) {
       : !st.total ? "没派过活"
       : acc ? `验过 ${st.total} 次 · 打回 ${st.missed} 次`
       : `做过 ${st.total} 次 · 打回 ${st.missed} 次`;
-    const hwarn = !h ? "不认识这个 AI 工具" : !h.ready ? "AI 工具还不能用" : "";
+    const hwarn = !h ? "不认识这个 harness" : !h.ready ? "harness还不能用" : "";
     return `
     <div class="ag${a.off ? " off" : ""}" data-edit="${esc(a.name)}" role="button" tabindex="0" title="编辑「${esc(a.name)}」">
       ${avatar(a)}
@@ -2402,7 +2402,7 @@ function renderTask() {
       <div class="kv">
         <b>状态</b>${status(t.status)}
         <b>执行者</b><span>${esc(t.agent || "待分配")}</span>
-        <b>AI 工具</b><span class="mono">${esc(t.runtime || "—")} · ${esc(t.model || "—")}</span>
+        <b>harness</b><span class="mono">${esc(t.runtime || "—")} · ${esc(t.model || "—")}</span>
         <b>位置</b><span>第 ${t.depth} 层 · 第 ${t.attempts} 次</span>
         <b>用量</b><span>${Number(t.tokens || 0).toLocaleString("en-US")}</span>
       </div>
@@ -2413,7 +2413,7 @@ function renderTask() {
       ${sec("汇报", t.report)}
       ${sec("打回 / 备注", t.feedback)}
       ${sec("危险操作审批", t.approval)}
-      ${t.session ? `<div class="sec"><div class="sec-h">过程 <span class="faint">来自 AI 工具的记录</span><span class="grow"></span><button class="btn line" id="tp-traj">${trajOpen ? "收起" : "展开"}</button></div><div id="traj"></div></div>` : ""}
+      ${t.session ? `<div class="sec"><div class="sec-h">过程 <span class="faint">来自 harness的记录</span><span class="grow"></span><button class="btn line" id="tp-traj">${trajOpen ? "收起" : "展开"}</button></div><div id="traj"></div></div>` : ""}
     </div>`;
   $(".dr-body", panel).scrollTop = scroll;
   if (trajOpen && t.session) loadTraj(t.id);
@@ -2565,14 +2565,14 @@ async function loadHarnessPane() {
   hzTools = Object.fromEntries(tools.map((t) => [t.name, t]));
   $("#hz-st").textContent = "";
   const have = hzAll.filter((h) => !h.cli || h.cli.path), miss = hzAll.filter((h) => h.cli && !h.cli.path);
-  $("#harnesses").innerHTML = have.map(harnessRow).join("") || `<div class="row empty">本机还没有 AI 工具，从下面挑一个安装</div>`;
+  $("#harnesses").innerHTML = have.map(harnessRow).join("") || `<div class="row empty">本机还没有 harness，从下面挑一个安装</div>`;
   const ups = have.filter((h) => h.cli?.update);
   $("#hz-up").hidden = !ups.length;
-  $("#hz-up").innerHTML = `<div class="row"><div class="pref-l"><div class="name">${ups.length} 个 AI 工具有新版本</div>
+  $("#hz-up").innerHTML = `<div class="row"><div class="pref-l"><div class="name">${ups.length} 个 harness有新版本</div>
     <div class="sub clip" title="${esc(ups.map((h) => `${h.name} ${h.cli.version} → ${h.cli.latest}`).join("\n"))}">${ups.map((h) => esc(hzName(h.name))).join("、")}</div></div>
     <button class="btn primary" type="button" data-hz-all>全部更新</button></div>`;
   $("#hz-more").hidden = !miss.length;
-  $("#hz-more").innerHTML = `<div class="row click${hzMore ? " open" : ""}" data-hz-more><div class="pref-l"><div class="name">安装其他 AI 工具（${miss.length}）</div>
+  $("#hz-more").innerHTML = `<div class="row click${hzMore ? " open" : ""}" data-hz-more><div class="pref-l"><div class="name">安装其他 harness（${miss.length}）</div>
     <div class="sub">把命令复制到「终端」里运行，装好后回到这一页刷新。用 npm 安装的要先装 Node.js</div></div><span class="chev">›</span></div>
     <div${hzMore ? "" : " hidden"}>${miss.map(installRow).join("")}</div>`;
 }
@@ -2695,7 +2695,7 @@ function renderGateway(g) {
   const row = (name, sub, ok, st) => `<div class="row"><div class="pref-l"><div class="name">${name}</div><div class="sub clip" title="${esc(sub)}">${esc(sub)}</div></div>
     <span class="state"><i class="dot ${ok ? "done" : "failed"}"></i>${st}</span></div>`;
   $("#gateway").innerHTML =
-    row("模型转接", g.running ? "只给 morula 自己的 AI 工具用" : g.error || "", g.running, g.running ? "运行中" : "未启动") +
+    row("模型转接", g.running ? "只给 morula 自己的 harness用" : g.error || "", g.running, g.running ? "运行中" : "未启动") +
     row("插件环境", g.bun ? `Bun ${g.bunVersion || ""}` : g.bunError || "", !!g.bun, g.bun ? "已就绪" : "缺少 Bun") +
     `<div class="row click" data-pane-go="plugins"><div class="pref-l"><div class="name">插件</div><div class="sub">已装 ${g.plugins ?? 0} 个，启用 ${g.enabled ?? 0} 个</div></div><span class="muted">管理 ›</span></div>`;
 }
@@ -3252,7 +3252,7 @@ function srcDetail(p, off) {
       const who = whoText(usedBy(p, m));
       return `<label title="${esc(m.name || m.id)}"><input type="checkbox" data-mon="${esc(m.id)}" data-for="${id}"${off.includes(m.id) ? "" : " checked"}>${mName(m)}${badges}${who ? `<span class="mp-who">${esc(who)}</span>` : ""}</label>`;
     }).join("") || '<span class="faint">这个来源没有列出模型</span>'}</div>
-    <div class="faint src-note">取消勾选的模型不出现在 agent 的模型列表里。已经在用它的 agent，开工时换成列表里的第一个。${p.codex ? "这里和「AI 工具 / codex / 订阅」勾的是同一份。" : ""}</div>`;
+    <div class="faint src-note">取消勾选的模型不出现在 agent 的模型列表里。已经在用它的 agent，开工时换成列表里的第一个。${p.codex ? "这里和「harness / codex / 订阅」勾的是同一份。" : ""}</div>`;
   const t = srcTest[p.id] || {}, ms = all.filter((m) => !off.includes(m.id));
   if (p.signedIn && ms.length) {
     html += `<div class="src-h">测试模型</div>
@@ -3364,7 +3364,7 @@ $("#prov-plug").addEventListener("click", () => { plugTab = "find"; openPrefs("p
 $("#prov-api").addEventListener("click", () => openApiKey());
 
 /* ---------- 首次启动 ---------- */
-// 四步：选 AI 工具 → 接入订阅 → 选模型并验证 → 整理以前的对话。
+// 四步：选 harness → 接入订阅 → 选模型并验证 → 整理以前的对话。
 // 第一次打开（助理没上线或还没做过自我介绍，也没点过「以后再说」）时自动弹出，每次启动只弹一次。
 let ready = null, readyTimer = 0, setupBack = false, setupShown = false;
 let guideState = null;  // onboard.asked、onboard.intro、onboard.hidden
@@ -3386,7 +3386,7 @@ async function checkReady() {
 function hzLine() {
   const ok = (harnesses || []).filter((h) => h.ready).map((h) => hzName(h.name));
   if (!harnesses) return "";
-  return ok.length ? `本机检测到 ${esc(ok.join("、"))}。` : "本机没找到能用的 AI 工具，点「接入」可以直接安装。";
+  return ok.length ? `本机检测到 ${esc(ok.join("、"))}。` : "本机没找到能用的 harness，点「接入」可以直接安装。";
 }
 // 助理不能用时，助理页输入框上方留一行提示和「接入」按钮，点了打开接入弹窗。上线后不显示。
 function renderGuide() {
@@ -3394,7 +3394,7 @@ function renderGuide() {
   box.hidden = r.online;
   if (box.hidden) return;
   box.innerHTML = `<div class="qs-hd"><div class="pref-l"><div class="name">助理还不能用</div>
-      <div class="sub">${r.reason ? esc(r.reason) + "。" : ""}选一个 AI 工具和模型给助理，就能开始。${hzLine()}</div></div>
+      <div class="sub">${r.reason ? esc(r.reason) + "。" : ""}选一个 harness和模型给助理，就能开始。${hzLine()}</div></div>
       <button class="btn primary" type="button" data-qs="setup">接入</button></div>`;
 }
 $("#qs").addEventListener("click", (e) => { if (e.target.closest("[data-qs=setup]")) openSetup(); });
@@ -3430,7 +3430,7 @@ function meterHTML(remaining) {
   return `<span class="meter"><span class="bar"><i class="${used >= 90 ? "hi" : used >= 70 ? "mid" : ""}" style="width:${r}%"></i></span></span><span class="sub">剩余 ${r}%</span>`;
 }
 
-// 第 1 步：五个 AI 工具，装了的勾选，没装的在这里装。
+// 第 1 步：五个 harness，装了的勾选，没装的在这里装。
 async function loadObTools() {
   clearTimeout(obToolTimer);
   const was = new Set(obTools.filter((t) => t.installing).map((t) => t.name));
@@ -3455,10 +3455,10 @@ function obToolRow(t) {
   return `<div class="row">${head}${sub}</div><button class="btn ${first ? "primary" : "line"} sm" type="button" data-ob-install="${esc(t.name)}"${can ? "" : " disabled"}>${t.error ? "重试" : t.broken ? "重装" : "安装"}</button></div>`;
 }
 function obToolsView() {
-  if (!obTools.length) return [obErr ? `<div class="form-err">${esc(obErr)}</div>` : obBusy("正在检查本机的 AI 工具…"), ""];
+  if (!obTools.length) return [obErr ? `<div class="form-err">${esc(obErr)}</div>` : obBusy("正在检查本机的 harness…"), ""];
   const n = obTools.filter((t) => t.installed && t.enabled).length;
-  const intro = obTools.some((t) => t.installed) ? "助理和 agent 借本机的 AI 工具干活。勾上的才会在 morula 里用。"
-    : "这台 Mac 上还没有能用的 AI 工具。至少装一个，助理才能干活；不知道选哪个就装 codex。";
+  const intro = obTools.some((t) => t.installed) ? "助理和 agent 借本机的 harness干活。勾上的才会在 morula 里用。"
+    : "这台 Mac 上还没有能用的 harness。至少装一个，助理才能干活；不知道选哪个就装 codex。";
   return [`<p class="sub">${intro}</p><div class="card list">${obTools.map(obToolRow).join("")}</div>`,
     `<span class="sub grow">${n ? `勾了 ${n} 个` : "至少装一个并勾上"}</span><button class="btn primary" type="button" data-ob="next"${n ? "" : " disabled"}>下一步</button>`];
 }
@@ -3654,10 +3654,10 @@ $("#setup-close").addEventListener("click", async () => {
   checkReady();
 });
 
-/* ---------- 一个 AI 工具的订阅窗口 ---------- */
+/* ---------- 一个 harness的订阅窗口 ---------- */
 // 账号（codex、WorkBuddy）或来源（opencode、pi），加上勾哪些模型。只有勾上的模型出现在 morula 里。
 let tsub = null, tsubPick = new Set(), tsubTest = {}, tsubTimer = 0, tsubMsg = "";
-// 启动流程第 2 步已经读过的直接用；从「设置 / AI 工具」打开时先读一次。
+// 启动流程第 2 步已经读过的直接用；从「设置 / harness」打开时先读一次。
 async function openTsub(name) {
   tsub = obSubs[name] || { name, models: [], loading: true };
   tsubPick = new Set(tsub.models.filter((m) => m.on).map((m) => m.id));
@@ -4016,14 +4016,14 @@ function pickList() {
 function pickMenu() {
   const ef = $("#as-effort"), sub = srcsOf(pickH).find((s) => s.v === pickS);
   let html = '<div class="pick-crumb">';
-  if (pickLv === 1) html += "<b>选 AI 工具</b>";
+  if (pickLv === 1) html += "<b>选 harness</b>";
   else {
     html += `<button type="button" data-lv="${pickLv - 1}" aria-label="返回上一层">${icon("left")}</button>` +
       `<button type="button" class="pick-cr" data-lv="1">${esc(pickH)}</button>`;
     if (pickLv === 3) html += `<i>›</i><button type="button" class="pick-cr" data-lv="2" title="${esc(sub?.l || "")}">${esc(sub?.l || "")}</button>`;
   }
   html += "</div>";
-  if (pickLv !== 2) html += `<label class="cmp-search">${icon("search")}<input id="pick-q" placeholder="${pickLv === 1 ? "在所有 AI 工具里找模型" : "找模型"}" autocomplete="off" value="${esc(pickQ)}"></label>`;
+  if (pickLv !== 2) html += `<label class="cmp-search">${icon("search")}<input id="pick-q" placeholder="${pickLv === 1 ? "在所有 harness里找模型" : "找模型"}" autocomplete="off" value="${esc(pickQ)}"></label>`;
   html += `<div class="pick-list" id="pick-list">${pickList()}</div>`;
   if (pickLv === 3 && !ef.hidden && pickS === $("#as-rt").value) {
     const dflt = ef.options[0].textContent.match(/（(.+)）/)?.[1] || "";
@@ -4365,3 +4365,13 @@ upd.addEventListener("click", async () => {
   window.addEventListener("focus", checkUpdate);
   show(VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : VIEWS.includes(store.get("view")) ? store.get("view") : "chat");
 })();
+
+// i18n: language selector
+document.addEventListener("DOMContentLoaded", () => {
+  loadLang();
+  const langSel = document.getElementById("lang-sel");
+  if (langSel) {
+    langSel.value = currentLang;
+    langSel.addEventListener("change", (e) => setLang(e.target.value));
+  }
+});
