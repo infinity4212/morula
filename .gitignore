@@ -1,0 +1,8 @@
+# 构建产物：dist 里是二进制、.app 与本地发布通道，加起来 60M 以上
+/dist/
+
+# 顶层这个 morula 是编译好的可执行文件（make build 的产物被拷出来放这儿了）
+/morula
+
+# macOS
+.DS_Store

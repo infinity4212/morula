@@ -1,0 +1,20 @@
+{
+  "_说明": "插件页「精选订阅」的列表，由 morula 筛选。2026-10-18 按 npm 周下载量选出，均未在 morula 中逐一验证。不收录 Claude 相关的包；codex 订阅 morula 本身已支持，也不收录。2026-10-19 加入 magpie 社区的 WorkBuddy、Qoder、ZCode 三个包（不按下载量选），同样未经逐一验证。desc 取自包在 npm 上的 description 和 README，2026-10-18 查询，后加的三个为 2026-10-19 查询；icon 为 icons/ 下的文件名，无合适图标则留空。icons 为不在精选中但常见的包配图标（搜索结果、已安装列表、模型来源用）。修改列表只需改此文件。",
+  "picks": [
+    {"name": "opencode-copilot-auth", "sub": "GitHub Copilot", "icon": "githubcopilot.svg", "desc": "GitHub Copilot 的登录插件。包在 npm 上没有写用法说明。"},
+    {"name": "opencode-gitlab-auth", "sub": "GitLab", "desc": "用 GitLab 账号 OAuth 登录。"},
+    {"name": "opencode-poe-auth", "sub": "Poe", "icon": "poe.svg", "desc": "用 Poe 账号 OAuth 登录。"},
+    {"name": "opencode-gemini-auth", "sub": "Gemini", "icon": "gemini-color.svg", "desc": "用 Google 账号 OAuth 登录 Gemini。README 写明：2026-06-18 起个人版、Google AI Pro、AI Ultra 账号已登录不了，Standard 和 Enterprise 订阅不受影响；Google 认为第三方软件用这种登录违反政策，账号可能受限。"},
+    {"name": "opencode-kilo-auth", "sub": "Kilo", "icon": "kilocode.svg", "desc": "登录 Kilo Gateway，能用其中的免费模型，例如 z-ai/glm-5:free。"},
+    {"name": "@igorvelho/opencode-kiro-auth", "sub": "Kiro", "icon": "kiro-color.svg", "desc": "用 AWS Kiro（CodeWhisperer）账号。是原插件的分支，加了 minimax-m2.5、glm-5、deepseek-3.2、qwen3-coder-next 等模型。"},
+    {"name": "@asframe/opencode-iflow-auth", "sub": "iFlow", "desc": "用 iFlow.cn 账号，能用 Qwen、DeepSeek、Kimi、GLM-5。支持 OAuth、API key 和 CLI 代理三种接法。"},
+    {"name": "@magpie-community/opencode-workbuddy-auth", "sub": "WorkBuddy", "icon": "codebuddy-color.svg", "desc": "用 WorkBuddy（腾讯 CodeBuddy 套餐）的账号，国内版和国际版 WorkBuddy AI 各一个来源。可以在浏览器里登录，也可以直接用 WorkBuddy 桌面端已登录的账号；README 写明 WorkBuddy 5.6 起桌面端的登录信息加密了，后一种用不了，要改用浏览器登录。"},
+    {"name": "@magpie-community/opencode-qoder-auth", "sub": "Qoder", "desc": "用 Qoder 账号，qoder.com 和 qoder.cn（Qoder CN）各一个来源，两边的账号不互通。在浏览器里授权登录，和 Qoder 桌面端的登录方式一样。"},
+    {"name": "@magpie-community/opencode-zcode-auth", "sub": "ZCode", "desc": "用智谱 GLM Coding Plan（Z.ai 或 BigModel）的账号，按 ZCode 的方式登录；也可以用 ZCode 桌面端已登录的账号，或直接填 GLM Coding Plan 的 API key。没有套餐的账号用 ZCode 的免费 Start Plan。"},
+    {"name": "@itssimplereally/opencode-kimicode-auth", "sub": "Kimi Code", "icon": "kimi.svg", "desc": "用 Moonshot AI 的账号 OAuth 登录 Kimi Code，用 Kimi 的模型。"}
+  ],
+  "icons": {
+    "opencode-google-antigravity-auth": "antigravity-color.svg",
+    "opencode-antigravity-auth": "antigravity-color.svg"
+  }
+}
