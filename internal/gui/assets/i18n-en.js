@@ -6,7 +6,7 @@ Object.assign(I18N.en, {
   "sidebar.routines":"Routines","sidebar.routines.title":"Routines (⌘3)",
   "sidebar.agents":"Agents","sidebar.agents.title":"Agents (⌘4)",
   "sidebar.settings":"Settings","sidebar.settings.title":"Settings (⌘,)",
-  "chat.inbox":"Inbox",
+  "chat.inbox":"Inbox","chat.crumb":"Assistant",
   "chat.input.placeholder":"Tell the assistant what to do — it will route to projects and dispatch. Paste images, drag in files. Type / for commands, @ to talk to an agent directly",
   "chat.ticks.label":"Jump to message","chat.queue.label":"Queued messages","chat.qdock.label":"Needs your answer",
   "chat.drop.hint":"Release to add file to this message",
@@ -43,7 +43,7 @@ Object.assign(I18N.en, {
   "settings.parallel.name":"Parallel","settings.parallel.sub":"Max concurrent tasks",
   "settings.retries.name":"Retries","settings.retries.sub":"Max retries when a task fails review",
   "settings.root.name":"Project root","settings.root.sub":"New project folders are created here",
-  "settings.section.past":"Past conversations","settings.onboard.name":"Import past conversations","settings.onboard.loading":"Loading…",
+  "settings.section.past":"Past conversations","settings.onboard.name":"Import past conversations","settings.onboard.loading":"Loading…","settings.onboard.link":"Organize ›",
   "settings.section.gateway":"Model gateway",
   "harness.title":"Harness",
   "harness.lead":"The assistant and agents use these harnesses to work. Disabled tools are hidden from morula. Log in to subscriptions under Accounts and select models for morula. Update when new versions are available.",
@@ -118,5 +118,10 @@ Object.assign(I18N.en, {
   "apikey.name.placeholder":"Optional; defaults to the domain of the service URL",
   "apikey.models":"Models","apikey.models.placeholder":"Optional; auto-detected; if unavailable, enter comma-separated",
   "apikey.save":"Save",
-  "common.loading":"Loading…","common.save":"Save","common.cancel":"Cancel","common.delete":"Delete","common.close":"Close","common.add":"Add","common.new":"New"
+  "common.loading":"Loading…","common.save":"Save","common.cancel":"Cancel","common.delete":"Delete","common.close":"Close","common.add":"Add","common.new":"New",
+  "common.sec":"s","common.min":"min","common.hr":"hr","common.day":"days","common.steps":"steps","common.installing":"Installing…","common.installed":"Installed",
+  "common.just.now":"just now","common.min.ago":"min ago","common.hr.ago":"hr ago","common.day.ago":"days ago",
+  "common.elapsed":"Took ","common.default.proj":"Default project","common.set.default.proj":"Set as default project",
+  "common.switch.to":"Switched to ","common.download":"Downloading and installing ","common.may.take":", may take a minute",
+  "common.not.long":"less than 1 min"
 });

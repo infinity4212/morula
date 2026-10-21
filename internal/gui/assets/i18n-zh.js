@@ -6,7 +6,7 @@ Object.assign(I18N.zh, {
   "sidebar.routines":"例行事项","sidebar.routines.title":"例行事项（⌘3）",
   "sidebar.agents":"Agent","sidebar.agents.title":"Agent（⌘4）",
   "sidebar.settings":"设置","sidebar.settings.title":"设置（⌘,）",
-  "chat.inbox":"收件箱",
+  "chat.inbox":"收件箱","chat.crumb":"助理",
   "chat.input.placeholder":"把要做的事告诉助理，它会归到项目里安排下去。可以粘贴图片、拖入文件。输入 / 看命令，输入 @ 直接找某个 agent 对话",
   "chat.ticks.label":"跳到某条消息","chat.queue.label":"排队的消息","chat.qdock.label":"需要你回答",
   "chat.drop.hint":"松开鼠标，把文件加到这条消息里",
@@ -43,7 +43,7 @@ Object.assign(I18N.zh, {
   "settings.parallel.name":"同时进行","settings.parallel.sub":"最多同时做几件活",
   "settings.retries.name":"重做次数","settings.retries.sub":"活没通过检查时，最多重做几次",
   "settings.root.name":"项目存放位置","settings.root.sub":"新项目的文件夹建在这里",
-  "settings.section.past":"以前的对话","settings.onboard.name":"整理以前的对话","settings.onboard.loading":"读取中…",
+  "settings.section.past":"以前的对话","settings.onboard.name":"整理以前的对话","settings.onboard.loading":"读取中…","settings.onboard.link":"整理 ›",
   "settings.section.gateway":"模型转接",
   "harness.title":"harness",
   "harness.lead":"助理和 agent 用这些 harness 干活。关掉的工具在 morula 里不出现；「订阅」里登录账号、勾选给 morula 用的模型。有新版本时可以直接更新。",
@@ -118,5 +118,11 @@ Object.assign(I18N.zh, {
   "apikey.name.placeholder":"可不填，默认用服务地址的域名",
   "apikey.models":"模型","apikey.models.placeholder":"可不填，会自动读取；读不到时用逗号分隔手填",
   "apikey.save":"保存",
-  "common.loading":"读取中…","common.save":"保存","common.cancel":"取消","common.delete":"删除","common.close":"关闭","common.add":"添加","common.new":"新建"
+  "settings.font.small":"小","settings.font.medium":"标准","settings.font.large":"大","settings.font.xlarge":"特大",
+  "common.loading":"读取中…","common.save":"保存","common.cancel":"取消","common.delete":"删除","common.close":"关闭","common.add":"添加","common.new":"新建",
+  "common.sec":"秒","common.min":"分钟","common.hr":"小时","common.day":"天","common.steps":"步","common.installing":"安装中…","common.installed":"已安装",
+  "common.just.now":"刚刚","common.min.ago":"分钟前","common.hr.ago":"小时前","common.day.ago":"天前",
+  "common.elapsed":"用时","common.default.proj":"默认项目","common.set.default.proj":"设为默认项目",
+  "common.switch.to":"已改用","common.download":"正在下载并加载","common.may.take":"，可能要几十秒",
+  "common.not.long":"不到 1 分钟"
 });

@@ -37,6 +37,7 @@ async function loadLang() {
     currentLang = d.lang || "zh";
   } catch (_) {}
   applyI18n();
+  document.dispatchEvent(new CustomEvent("i18n-change", { detail: { lang: currentLang } }));
 }
 
 async function setLang(lang) {
@@ -49,4 +50,5 @@ async function setLang(lang) {
     });
   } catch (_) {}
   applyI18n();
+  document.dispatchEvent(new CustomEvent("i18n-change", { detail: { lang } }));
 }

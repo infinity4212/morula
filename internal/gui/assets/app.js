@@ -396,7 +396,7 @@ function argsBrief(tool, raw) {
 }
 function actTick(a) {
   const st = a.segs[a.segs.length - 1]?.querySelector(".proc-st span");
-  if (st) st.textContent = `${a.status} · ${Math.max(0, Math.round((Date.now() - a.start) / 1000))} 秒`;
+  if (st) st.textContent = `${a.status} · ${Math.max(0, Math.round((Date.now() - a.start) / 1000))} ${t("common.sec")}`;
 }
 // actSeg 返回这组过程现在该往里加的一块：还在对话末尾就接着用，否则另起一块，状态行挪过去。
 function actSeg(a) {
@@ -531,7 +531,7 @@ function activity(e) {
         seg.classList.remove("live");
         seg.classList.add("folded");
         const last = i === a.segs.length - 1;
-        seg.querySelector(".proc-h").innerHTML = `<span class="chev">›</span>${esc(a.label || "处理过程")} · ${seg.dataset.n} 步` + (last ? ` · ${secs} 秒${tail}` : "");
+        seg.querySelector(".proc-h").innerHTML = `<span class="chev">›</span>${esc(a.label || "处理过程")} · ${seg.dataset.n} ${t("common.steps")}${last ? ` · ${secs} ${t("common.sec")}${tail}` : ""}`;
       });
       break;
     }
@@ -591,7 +591,7 @@ function reviewBadge(e) {
     : list("改动", e.changes) + list("需要你确认", e.gaps) +
       `<div class="rv-h">规范检查</div><pre class="tool-out">${esc(e.lint || "（无输出）")}</pre>` +
       (e.verdict === "revised" ? `<div class="rv-h">原稿</div><pre class="tool-out">${esc(e.original)}</pre>` : "") +
-      `<div class="rv-h">${esc(e.reviewer)} · ${esc(e.model)} · ${(e.ms / 1000).toFixed(1)} 秒</div>`;
+      `<div class="rv-h">${esc(e.reviewer)} · ${esc(e.model)} · ${(e.ms / 1000).toFixed(1)} ${t("common.sec")}</div>`;
   return `<details class="review ${badge[0]}"><summary>${badge[1]}</summary>${more}</details>`;
 }
 // 回复落在看不到的上方（那条消息后面又有别的消息）时，底部提示一下，点了跳过去。
@@ -1498,7 +1498,7 @@ $("#ap-open").addEventListener("click", async () => {
 });
 
 async function loadMemory() {
-  $("#mem-st").textContent = "读取中…";
+  $("#mem-st").textContent = t("common.loading");
   try {
     const m = await api("/api/memory");
     $("#mem-text").value = m.text;
@@ -1617,7 +1617,7 @@ let flowFold = {}; // 用户手动展开或收起过的泳道
 const FLOW_ST = { working: "进行中", done: "已完成", failed: "失败", stopped: "已停止" };
 function flowDur(f) {
   const s = Math.max(0, Math.round(((f.ended ? Date.parse(f.ended) : Date.now()) - Date.parse(f.started)) / 1000));
-  return s < 60 ? `${s} 秒` : s < 3600 ? `${Math.floor(s / 60)} 分钟` : `${Math.floor(s / 3600)} 小时`;
+  return s < 60 ? `${s} ${t("common.sec")}` : s < 3600 ? `${Math.floor(s / 60)} ${t("common.min")}` : `${Math.floor(s / 3600)} ${t("common.hr")}`;
 }
 // 助理页右栏：每条安排一段，写项目、原话和每一步谁在做。在跑的列出步骤，结束的变淡、只留一行，
 // 点标题可以展开或收起步骤。全部列出，多了在右栏里滚动
@@ -1686,7 +1686,7 @@ $("#flows").addEventListener("click", (e) => {
 function shortAgo(iso) {
   const m = Math.round((Date.now() - Date.parse(iso)) / 60000);
   if (!(m >= 0)) return "";
-  return m < 1 ? "刚刚" : m < 60 ? `${m} 分钟前` : m < 1440 ? `${Math.floor(m / 60)} 小时前` : `${Math.floor(m / 1440)} 天前`;
+  return m < 1 ? t("common.just.now") : m < 60 ? `${m} ${t("common.min.ago")}` : m < 1440 ? `${Math.floor(m / 60)} ${t("common.hr.ago")}` : `${Math.floor(m / 1440)} ${t("common.day.ago")}`;
 }
 // avatar 是 agent 的头像：浅色渐变的圆角方块，中间一个白色细线几何标记。
 // 头像都是 morula 的桑葚，靠颜色区分：助理固定用桑葚紫，成员按花名册顺序，色相和转角各自从名字算出的位置往后取第一个没人用的，
@@ -2067,7 +2067,7 @@ function rtWhen(iso) {
 function rtTook(a, b) {
   const s = Math.round((Date.parse(b) - Date.parse(a)) / 1000);
   if (!(s >= 0)) return "";
-  return "用时 " + (s < 60 ? s + " 秒" : s < 3600 ? Math.round(s / 60) + " 分" : (s / 3600).toFixed(1) + " 小时");
+  return t("common.elapsed") + (s < 60 ? s + " " + t("common.sec") : s < 3600 ? Math.round(s / 60) + " " + t("common.min") : (s / 3600).toFixed(1) + " " + t("common.hr"));
 }
 const rtWho = (a) => a || "助理";
 function rtResult(x) {
@@ -2234,7 +2234,7 @@ async function loadProjects() {
         </div>
         <div class="tile-d clip2">${esc(p.summary) || '<span class="faint">还没有项目摘要</span>'}</div>
         <div class="tile-ft">
-          ${p.default ? '<span class="chip def" title="闲聊、问答和不属于其他项目的零散小事归到这里">默认项目</span>' : ""}
+          ${p.default ? `<span class="chip def" title="${t("common.default.proj")}">${t("common.default.proj")}</span>` : ""}
           ${dir ? `<span class="chip mono dir" title="${esc(p.dir)}">${esc(dir)}</span>` : ""}
           ${ags.length ? `<span class="chip" title="${esc(ags.join("、"))}">${ags.length} 个常用 agent</span>` : ""}
         </div>
@@ -2299,8 +2299,8 @@ function renderProject() {
     <div class="proj-head">
       <div class="grow" style="min-width:0"><h1>${esc(p.name)}</h1><div class="sub mono clip" title="${esc(p.dir)}">${esc(p.dir)}</div></div>
       ${p.owner ? `<span class="chip" title="派到这个项目的活整件交给它">负责人 ${esc(p.owner)}</span>` : ""}
-      ${detail.default ? '<span class="chip def" title="闲聊、问答和不属于其他项目的零散小事归到这里">默认项目</span>'
-        : '<button class="btn" id="proj-default" title="闲聊、问答和不属于其他项目的零散小事归到这里">设为默认项目</button>'}
+      ${detail.default ? `<span class="chip def" title="${t("common.default.proj")}">${t("common.default.proj")}</span>`
+        : `<button class="btn" id="proj-default" title="${t("common.set.default.proj")}">${t("common.set.default.proj")}</button>`}
       <button class="btn" id="proj-edit">编辑项目</button>
       <button class="btn danger" id="proj-del" title="只删 morula 里的记录，项目文件夹里的文件不动">删除项目</button>
     </div>
@@ -2591,10 +2591,10 @@ document.addEventListener("click", async (e) => {
   if (!b) return;
   const name = b.dataset.hzInstall, out = b.closest(".row").querySelector(`[data-hz-out="${CSS.escape(name)}"]`);
   b.closest(".hz-cmds").querySelectorAll("button[data-hz-install]").forEach((x) => { x.disabled = true; });
-  b.textContent = "安装中…";
+  b.textContent = t("common.installing");
   out.hidden = false;
   out.className = "sub";
-  out.textContent = "正在安装，通常要半分钟到几分钟，装完会自动刷新。";
+  out.textContent = t("common.installing");
   try {
     await api(`/api/harnesses/${encodeURIComponent(name)}/install`, { method: "POST", body: JSON.stringify({ via: b.dataset.via }) });
     if (!$("#setup").hidden) checkReady();
@@ -2733,7 +2733,7 @@ function renderImport() {
   if (o.state === "working") {
     const min = Math.max(0, Math.round((Date.now() - Date.parse(o.started)) / 60000));
     body.innerHTML = done + `<div class="card list"><div class="row"><div class="pref-l"><div class="name">助理在整理 ${o.sessions.length} 个对话</div>
-      <div class="sub">${esc(o.model)} · 已用 ${min} 分钟。可以先去别的页面，整理完回到这里勾选。</div></div>${status("working")}</div></div>`;
+      <div class="sub">${esc(o.model)} · ${min} ${t("common.min")}</div></div>${status("working")}</div></div>`;
     return;
   }
   // 照画布「从别的工具导入」：每个来源一张卡片，写明新会话、跳过的会话、上次整理的时间，各自能整理
@@ -2841,7 +2841,7 @@ function renderStaff() {
   if (s.state === "working") {
     const min = Math.max(0, Math.round((Date.now() - Date.parse(s.started)) / 60000));
     body.innerHTML = done + `<div class="card list"><div class="row"><div class="pref-l"><div class="name">助理在提议 agent</div>
-      <div class="sub">${esc(s.model)} · 已用 ${min} 分钟。${s.why ? esc(s.why) + "。" : ""}可以先去别的页面，提议好后回到这里勾选。</div></div>${status("working")}</div></div>`;
+      <div class="sub">${esc(s.model)} · ${min} ${t("common.min")}.${s.why ? " " + esc(s.why) + "." : ""}</div></div>${status("working")}</div></div>`;
     return;
   }
   const as = stf.assistant;
@@ -2928,10 +2928,10 @@ $("#staff-body").addEventListener("click", async (e) => {
 
 /* ---------- 订阅 ---------- */
 function ago(iso, future) {
-  const t = Date.parse(iso);
-  if (!t) return "";
-  let m = Math.round(Math.abs(t - Date.now()) / 60000);
-  const s = m < 1 ? "不到 1 分钟" : m < 60 ? `${m} 分钟` : m < 1440 ? `${Math.floor(m / 60)} 小时 ${m % 60} 分` : `${Math.floor(m / 1440)} 天 ${Math.floor((m % 1440) / 60)} 小时`;
+  const ts = Date.parse(iso);
+  if (!ts) return "";
+  let m = Math.round(Math.abs(ts - Date.now()) / 60000);
+  const s = m < 1 ? t("common.not.long") : m < 60 ? `${m} ${t("common.min")}` : m < 1440 ? `${Math.floor(m / 60)} ${t("common.hr")} ${m % 60} ${t("common.min")}` : `${Math.floor(m / 1440)} ${t("common.day")} ${Math.floor((m % 1440) / 60)} ${t("common.hr")}`;
   return future ? s + "后重置" : s + "前";
 }
 const WIN = { "5 hours": "5 小时", "7 days": "每周", "7 天": "每周", Credits: "积分", "Add-on credits": "加购积分", "Shared credits": "共享积分", "Dedicated credits": "专属积分" };
@@ -3004,7 +3004,7 @@ const AUTH = { oauth: "已登录", api: "API 密钥" };
 
 const plugSt = () => $(pane === "providers" ? "#prov-st" : "#plug-st");
 async function loadPlugins(refresh) {
-  plugSt().textContent = "读取中…";
+  plugSt().textContent = t("common.loading");
   try {
     setPlug(await api("/api/plugins" + (refresh ? "?refresh=1" : "")));
   } catch (err) {
@@ -3089,7 +3089,7 @@ function renderPkgs() {
       <div class="tile-d pk-d">${(d = (picks || []).find((x) => x.name === k.name)?.desc || cleanDesc(k.description)) ? esc(d) : '<span class="faint">没有写说明</span>'}</div>
       <div class="tile-ft"><span class="pk-m" title="最近 7 天下载量">↓ ${fmtN(k.weekly)}/周</span><span class="tag mono">${esc(k.version)}</span>
         ${k.homepage ? `<span class="flink" data-open="${esc(k.homepage)}">主页</span>` : ""}<span class="grow"></span>
-        ${has ? '<span class="state"><i class="dot done"></i>已安装</span>' : `<button class="btn line" data-pkg-add="${esc(k.name)}"${busy ? " disabled" : ""}>${busy ? "安装中…" : "安装"}</button>`}</div>
+        ${has ? `<span class="state"><i class="dot done"></i>${t("common.installed")}</span>` : `<button class="btn line" data-pkg-add="${esc(k.name)}"${busy ? " disabled" : ""}>${busy ? t("common.installing") : t("common.add")}</button>`}</div>
     </div>`;
   }).join("") || '<div class="card row empty">没有搜到插件。换个关键字试试。</div>';
 }
@@ -3105,9 +3105,9 @@ function renderPicks() {
       ${(d = p.desc || cleanDesc(k?.description)) ? `<div class="tile-d pk-d" title="${esc(d)}">${esc(d)}</div>` : ""}
       <div class="tile-ft">${k ? `<span class="pk-m" title="最近 7 天下载量">↓ ${fmtN(k.weekly)}/周</span>` : ""}<span class="tag warn" title="未经逐一验证">未验证</span>
         <span class="flink" data-open="https://www.npmjs.com/package/${esc(p.name)}">插件主页</span><span class="grow"></span>
-        ${has ? '<span class="state"><i class="dot done"></i>已安装</span>' : `<button class="btn line" data-pkg-add="${esc(p.name)}"${busy ? " disabled" : ""}>${busy ? "安装中…" : "安装"}</button>`}</div>
+        ${has ? `<span class="state"><i class="dot done"></i>${t("common.installed")}</span>` : `<button class="btn line" data-pkg-add="${esc(p.name)}"${busy ? " disabled" : ""}>${busy ? t("common.installing") : t("common.add")}</button>`}</div>
     </div>`;
-  }).join("") || '<div class="card row empty">读取中…</div>';
+  }).join("") || `<div class="card row empty">${t("common.loading")}</div>`;
 }
 $("#plug-search").addEventListener("submit", (e) => { e.preventDefault(); searchPkgs(e.target.q.value.trim()); });
 async function installPkg(spec, name) {
@@ -4192,8 +4192,8 @@ async function savePick() {
   box.querySelectorAll("select, button").forEach((x) => (x.disabled = true));
   try {
     renderAgents(await api("/api/agents/" + encodeURIComponent(box.dataset.agent), { method: "PATCH", body: JSON.stringify(body) }));
-    const t = pickText();
-    $("#chat-state").textContent = `已改用 ${t.model}`;
+    const pt = pickText();
+    $("#chat-state").textContent = `${t("common.switch.to")}${pt.model}`;
     checkReady();
   } catch (err) {
     $("#chat-state").textContent = err.message;
@@ -4207,18 +4207,21 @@ $("#font-seg").addEventListener("change", (e) => {
   applyFont(e.currentTarget.dataset.value);
   api("/api/ui", { method: "POST", body: JSON.stringify({ font: +e.currentTarget.dataset.value }) }).catch(() => {});
 });
-seg($("#font-seg"), [{ v: "13", l: "小" }, { v: "14", l: "标准" }, { v: "15", l: "大" }, { v: "16", l: "特大" }], store.get("font") || "14");
+seg($("#font-seg"), [{ v: "13", l: t("settings.font.small") }, { v: "14", l: t("settings.font.medium") }, { v: "15", l: t("settings.font.large") }, { v: "16", l: t("settings.font.xlarge") }], store.get("font") || "14");
 applyFont(store.get("font"));
 api("/api/ui").then((u) => applyFont(u.font)).catch(() => {});
+document.addEventListener("i18n-change", () => {
+  seg($("#font-seg"), [{ v: "13", l: t("settings.font.small") }, { v: "14", l: t("settings.font.medium") }, { v: "15", l: t("settings.font.large") }, { v: "16", l: t("settings.font.xlarge") }], store.get("font") || "14");
+});
 const plugForm = $("#plug-form");
 plugForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const b = $("#plug-submit"), spec = plugForm.spec.value.trim();
   if (!spec) return;
   b.disabled = plugForm.spec.disabled = true;
-  b.textContent = "安装中…";
+  b.textContent = t("common.installing");
   $("#plug-form-err").textContent = "";
-  $("#plug-hint").textContent = `正在下载并加载 ${spec}，可能要几十秒`;
+  $("#plug-hint").textContent = `${t("common.download")}${spec}${t("common.may.take")}`;
   try {
     setPlug(await api("/api/plugins", { method: "POST", body: JSON.stringify({ spec }) }));
     plugForm.reset();
