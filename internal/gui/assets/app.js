@@ -4370,8 +4370,8 @@ upd.addEventListener("click", async () => {
 })();
 
 // i18n: language selector
-document.addEventListener("DOMContentLoaded", () => {
-  loadLang();
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadLang();
   const langSel = document.getElementById("lang-sel");
   if (langSel) {
     langSel.value = currentLang;
