@@ -2,6 +2,9 @@
 
 A desktop workbench for AI agent teams.
 
+<img width="1179" height="759" alt="image" src="https://github.com/user-attachments/assets/2947dc8b-879c-4898-aaa3-40f4301c5228" />
+
+
 You talk to an assistant in a single conversation. It figures out which project a message belongs to, breaks it into tasks, and dispatches them to agents — who is doing what, where each task stands, whether output passed review — all visible on screen.
 
 **Single conversation thread.** From the user's perspective there is one continuous conversation. No switching windows, no picking agents. The assistant handles routing, scheduling, and follow-ups on its own.
